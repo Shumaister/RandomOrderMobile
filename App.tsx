@@ -1,11 +1,11 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import RandomScreen from './src/screens/RandomScreen'
+import WelcomeScreen from './src/screens/WelcomeScreen'
 
 const App = () => {
   return (
-    <View>
-      <Text>Hola Mundo!</Text>
-    </View>
+    <RandomScreen />
+    // <WelcomeScreen />
   )
 }
 
