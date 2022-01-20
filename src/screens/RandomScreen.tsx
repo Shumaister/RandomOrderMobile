@@ -84,7 +84,7 @@ const RandomScreen = () => {
 
             {
                 items?.map((item, i) => {
-                    return (<View >
+                    return (<View key={i}>
                         <Text style={styles.result}>{` `}</Text>
                         <Text style={styles.result}>{`Equipo ${i + 1}:`}</Text>
                         <Text style={styles.result}>{printResult(item)}</Text>
