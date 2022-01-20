@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, Picker } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { UseAxiosConnector } from '../components/UseAxiosConnector';
 import { Pokemon } from '../model/Pokemon';
+import { Picker } from '@react-native-picker/picker';
+import { Chunkify } from '../utils/Utils';
 
 const RandomScreen = () => {
-    const [items, setItems] = useState<Array<string> | null>(null)
+    const [items, setItems] = useState<Array<Array<string>> | null>(null)
     const [textItems, setTextItems] = useState<string | null>(null)
-    const [selectedValue, setSelectedValue] = useState<string | null>("java");
-
+    const [selectedValue, setSelectedValue] = useState<string>("1");
 
     const handleTypeText = (text: string) => {
         setTextItems(text)
@@ -17,12 +18,15 @@ const RandomScreen = () => {
         let list: Array<string> = textItems ? textItems.trim().split(',') : []
 
         list = list.sort(() => Math.random() - 0.42)
-        setItems(list)
+
+        const chunks = Chunkify(list, parseInt(selectedValue), true)
+
+        setItems(chunks)
     }
 
-    const printResult = () => {
-        if (items && items.length > 0)
-            return items.toString()
+    const printResult = (item: Array<string>) => {
+        if (item && item.length > 0)
+            return item.toString()
 
         return "-"
     }
@@ -48,16 +52,18 @@ const RandomScreen = () => {
             />
             <View >
                 <Text > </Text>
-               
-      <Picker
-        selectedValue={selectedValue}
-        style={{ height: 50, width: 150 }}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-      >
-        <Picker.Item label="Java" value="java" />
-        <Picker.Item label="JavaScript" value="js" />
-      </Picker>
-    
+                <Picker
+                    selectedValue={selectedValue}
+                    onValueChange={(itemValue) => {
+                        console.log('itemValue', itemValue);
+                        setSelectedValue(itemValue)
+                    }
+                    }>
+                    <Picker.Item label="1 Equipo" value="1" />
+                    <Picker.Item label="2 Equipos" value="2" />
+                    <Picker.Item label="3 Equipos" value="3" />
+                    <Picker.Item label="4 Equipos" value="4" />
+                </Picker>
                 <Text > </Text>
             </View>
             <TouchableOpacity
@@ -73,9 +79,22 @@ const RandomScreen = () => {
             </View>
 
             <View >
-                <Text style={styles.result}>Resultado:</Text>
-                <Text style={styles.result}>{printResult()}</Text>
+                <Text style={styles.result}>Resultado</Text>
             </View>
+
+            {
+                items?.map((item, i) => {
+                    return (<View >
+                        <Text style={styles.result}>{` `}</Text>
+                        <Text style={styles.result}>{`Equipo ${i + 1}:`}</Text>
+                        <Text style={styles.result}>{printResult(item)}</Text>
+                    </View>
+                    )
+                })
+            }
+
+
+
         </View>
     );
 };
